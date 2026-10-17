@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Routes, Route, NavLink, Link, Outlet, useLocation } from 'react-router-dom';
 import { translations } from './i18n';
-import { Reveal, useScrollVars, useMouseGlow, useInteractions, useKonami, BackToTop } from './components';
+import { Reveal, useScrollVars, useMouseGlow, useInteractions, useKonami, BackToTop, ChatWidget } from './components';
 import Home from './pages/Home';
 import About from './pages/About';
 import Skills from './pages/Skills';
@@ -91,6 +91,7 @@ function Layout({ t, lang, setLang, theme, setTheme }) {
       </main>
 
       <BackToTop />
+      <ChatWidget t={t} />
 
       <Reveal as="footer" className="footer">
         <div className="socials">

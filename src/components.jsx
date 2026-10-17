@@ -467,3 +467,93 @@ export function BackToTop() {
     </button>
   );
 }
+
+
+// ---------- v10: ИИ-ассистент (запросы идут на свой backend, ключ не в браузере) ----------
+
+const CHAT_URL = import.meta.env.VITE_CHAT_URL || '/api/chat';
+
+export function ChatWidget({ t }) {
+  const [open, setOpen] = useState(false);
+  const [messages, setMessages] = useState([]);
+  const [input, setInput] = useState('');
+  const [loading, setLoading] = useState(false);
+  const bodyRef = useRef(null);
+
+  useEffect(() => {
+    if (bodyRef.current) bodyRef.current.scrollTop = bodyRef.current.scrollHeight;
+  }, [messages, loading]);
+
+  const send = async (text) => {
+    const content = text.trim();
+    if (!content || loading) return;
+    const next = [...messages, { role: 'user', content }];
+    setMessages(next);
+    setInput('');
+    setLoading(true);
+    try {
+      const res = await fetch(CHAT_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ messages: next }),
+      });
+      if (!res.ok) throw new Error('bad status');
+      const data = await res.json();
+      setMessages((m) => [...m, { role: 'assistant', content: data.reply || t.chat.error }]);
+    } catch {
+      setMessages((m) => [...m, { role: 'assistant', content: t.chat.error, error: true }]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      <button className="chat-fab" onClick={() => setOpen(!open)} aria-expanded={open}>
+        {open ? '✕' : '💬'} {!open && t.chat.open}
+      </button>
+
+      <div className={`chat-panel ${open ? 'open' : ''}`} role="dialog" aria-label={t.chat.title}>
+        <div className="chat-head">{t.chat.title}</div>
+        <div className="chat-body" ref={bodyRef}>
+          {messages.length === 0 && <p className="chat-intro">{t.chat.intro}</p>}
+          {messages.map((m, i) => (
+            <div key={i} className={`chat-msg ${m.role} ${m.error ? 'err' : ''}`}>
+              {m.content}
+            </div>
+          ))}
+          {loading && <div className="chat-msg assistant typing">{t.chat.thinking}</div>}
+        </div>
+
+        {messages.length === 0 && (
+          <div className="chat-chips">
+            {t.chat.suggestions.map((s) => (
+              <button key={s} type="button" onClick={() => send(s)}>
+                {s}
+              </button>
+            ))}
+          </div>
+        )}
+
+        <form
+          className="chat-form"
+          onSubmit={(e) => {
+            e.preventDefault();
+            send(input);
+          }}
+        >
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder={t.chat.placeholder}
+            maxLength={500}
+            aria-label={t.chat.placeholder}
+          />
+          <button type="submit" disabled={loading || !input.trim()}>
+            {t.chat.send}
+          </button>
+        </form>
+      </div>
+    </>
+  );
+}
