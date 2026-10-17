@@ -13,7 +13,7 @@ const SOCIALS = [
   { name: 'Instagram', href: 'https://www.instagram.com/mustafodev/' },
   { name: 'GitHub', href: 'https://github.com/Mustafo-Prog' },
   { name: 'Telegram', href: 'https://t.me/mustafoprog' },
-  { name: 'LinkedIn', href: 'https://www.linkedin.com/in/mustafo-murtazaev-807a60443/' },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/in/mustafo-dev' },
   { name: 'Email', href: 'mailto:mustafomurtazaev7@gmail.com' },
 ];
 
