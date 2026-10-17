@@ -608,3 +608,653 @@ main {
 @media (max-width: 800px) {
   .solar { --solar-size: 92vw; }
 }
+
+/* ================= v3: pages, interactions, reviews ================= */
+
+.nav-link.active { color: var(--text); }
+.nav-link.active::after { width: 100%; }
+
+/* Курсорное свечение */
+.mouse-glow {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 420px;
+  height: 420px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(167, 139, 250, 0.18), transparent 60%);
+  transform: translate(calc(var(--mx, -999px) - 210px), calc(var(--my, -999px) - 210px));
+  pointer-events: none;
+  z-index: -1;
+}
+
+/* Переход между страницами */
+.page {
+  animation: pageIn 0.7s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(24px); filter: blur(6px); }
+  to { opacity: 1; transform: none; filter: none; }
+}
+
+/* Живой градиент в заголовке */
+.gradient-text {
+  background-size: 200% auto;
+  animation: shimmer 6s linear infinite;
+}
+@keyframes shimmer {
+  to { background-position: 200% center; }
+}
+
+/* Бегущая строка технологий */
+.marquee {
+  overflow: hidden;
+  margin: 40px 0 20px;
+  padding: 18px 0;
+  border-block: 1px solid var(--border);
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.marquee-track {
+  display: flex;
+  gap: 48px;
+  width: max-content;
+  white-space: nowrap;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--muted);
+  animation: marquee 28s linear infinite;
+}
+.marquee-track span:nth-child(3n + 1) { color: var(--accent); }
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+
+/* Статистика со счётчиками */
+.stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+  gap: 20px;
+}
+.stat {
+  padding: 28px;
+  border-radius: 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  text-align: center;
+  backdrop-filter: blur(12px);
+  transition: transform 0.4s, border-color 0.4s;
+}
+.stat:hover { transform: translateY(-6px); border-color: var(--accent); }
+.stat-value {
+  font-size: 2.6rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.stat-label { color: var(--muted); }
+
+.text-link {
+  display: inline-block;
+  margin-top: 28px;
+  color: var(--accent);
+  font-weight: 600;
+  text-decoration: none;
+  transition: letter-spacing 0.3s;
+}
+.text-link:hover { letter-spacing: 1px; }
+
+/* Солнечная система: пауза и увеличение при наведении */
+.orbit:has(.planet:hover) {
+  animation-play-state: paused;
+  z-index: 5;
+}
+.orbit:has(.planet:hover) .planet {
+  animation-play-state: paused;
+}
+.planet {
+  transition: scale 0.35s ease, box-shadow 0.3s;
+}
+.planet:hover {
+  scale: 1.7;
+  font-size: calc(var(--p) * 0.2);
+  box-shadow: 0 0 40px 4px var(--c);
+  z-index: 10;
+}
+
+/* Карточки проектов с наклоном и подъёмом */
+.project.tilt-card {
+  transition: transform 0.2s ease-out, box-shadow 0.4s, border-color 0.4s;
+}
+.project.tilt-card:hover {
+  transform: perspective(900px) rotateX(var(--rx, 0deg)) rotateY(var(--ry, 0deg)) translateY(-10px);
+}
+
+/* Отзывы */
+.review-form {
+  display: grid;
+  gap: 14px;
+  max-width: 620px;
+  margin: 0 auto 60px;
+  padding: 28px;
+  border-radius: 24px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+}
+.field-label {
+  display: grid;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+.review-form input,
+.review-form textarea {
+  font: inherit;
+  padding: 12px 16px;
+  border-radius: 14px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text);
+  outline: none;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+.review-form input:focus,
+.review-form textarea:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.15);
+}
+.review-form textarea { min-height: 110px; resize: vertical; }
+.review-form .btn { justify-self: start; margin-top: 4px; border: none; cursor: pointer; }
+
+.rating { display: flex; gap: 6px; }
+.rating button {
+  background: none;
+  border: none;
+  font-size: 1.6rem;
+  line-height: 1;
+  cursor: pointer;
+  color: var(--border);
+  transition: transform 0.2s, color 0.2s;
+}
+.rating button.on { color: #fbbf24; }
+.rating button:hover { transform: scale(1.25); }
+
+.form-msg { color: var(--accent); font-weight: 600; margin: 0; }
+.form-err { color: var(--accent-2); font-weight: 600; margin: 0; }
+
+.review-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 20px;
+}
+.review {
+  padding: 24px;
+  border-radius: 22px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  animation: pageIn 0.6s ease both;
+  transition: transform 0.4s, border-color 0.4s;
+}
+.review:hover { transform: translateY(-6px); border-color: var(--accent); }
+.review h4 { margin: 6px 0 4px; }
+.review .meta { color: var(--muted); font-size: 0.85rem; margin-bottom: 10px; }
+.review p { margin: 0; color: var(--muted); line-height: 1.6; }
+.r-stars { color: #fbbf24; letter-spacing: 2px; }
+
+.notfound { text-align: center; padding: 140px 0; }
+
+@media (max-width: 800px) {
+  .marquee-track { font-size: 1.1rem; }
+}
+
+
+/* ================= v4: солнечная система и новые секции ================= */
+
+/* Система больше не переворачивается при прокрутке — только лёгкий параллакс */
+.solar {
+  transform: translateY(calc(var(--scroll, 0) * -0.04px));
+}
+
+/* Пауза всей системы, пока курсор на планете */
+.solar.paused .orbit,
+.solar.paused .planet {
+  animation-play-state: paused;
+}
+
+/* Планета всегда стоит ровно: компенсирует поворот орбиты и свой собственный стартовый угол */
+@keyframes spin-back {
+  from { transform: rotate(calc(var(--start) * -1)); }
+  to { transform: rotate(calc(var(--start) * -1 - 360deg)); }
+}
+
+/* Подпись над планетой при наведении — всегда горизонтальная и читаемая */
+.planet::after {
+  content: attr(data-name);
+  position: absolute;
+  left: 50%;
+  bottom: calc(100% + 10px);
+  translate: -50% 0;
+  padding: 4px 10px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.planet:hover::after {
+  opacity: 1;
+}
+
+/* Секции с soft skills и процессом работы */
+.sub-title {
+  font-size: 1.8rem;
+  margin: 0 0 28px;
+}
+.soft-grid,
+.steps {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 20px;
+}
+.soft-card,
+.step-card {
+  padding: 26px;
+  border-radius: 22px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  transition: transform 0.4s, border-color 0.4s, box-shadow 0.4s;
+}
+.soft-card:hover,
+.step-card:hover {
+  transform: translateY(-8px);
+  border-color: var(--accent);
+  box-shadow: 0 20px 40px -18px var(--accent);
+}
+.soft-card .idx,
+.step-card .idx {
+  font-size: 2rem;
+  font-weight: 800;
+  background: linear-gradient(90deg, var(--accent), var(--accent-2));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.soft-card h3,
+.step-card h3 {
+  margin: 10px 0 8px;
+}
+.soft-card p,
+.step-card p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+
+/* ================= v5: хover для всех планет ================= */
+
+.planet {
+  cursor: pointer;
+  filter: brightness(1);
+  transition: scale 0.4s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.3s, filter 0.3s;
+}
+
+/* Пульсирующее кольцо-ореол */
+.planet::before {
+  content: '';
+  position: absolute;
+  inset: -8px;
+  border-radius: 50%;
+  border: 2px solid var(--c);
+  opacity: 0;
+  pointer-events: none;
+}
+.planet:hover::before {
+  animation: halo 1.2s ease-out infinite;
+}
+@keyframes halo {
+  0% { opacity: 0.9; transform: scale(1); }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+
+/* Наведённая планета: больше, ярче, внутренний текст скрыт, название — в подписи */
+.planet:hover {
+  scale: 1.45;
+  filter: brightness(1.15);
+  box-shadow: 0 0 30px 6px var(--c);
+  color: transparent;
+  z-index: 10;
+}
+
+/* Подпись над планетой — компактная, без дублирования */
+.planet::after {
+  font-size: 10px;
+  letter-spacing: 0.3px;
+  box-shadow: 0 8px 20px -8px var(--c);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .planet:hover::before { animation: none; }
+}
+
+/* ================= v6: чёткий хover без размытия ================= */
+
+/* Вместо scale увеличиваем размер самой планеты: текст и края остаются чёткими */
+.planet {
+  filter: none;
+  text-shadow: none;
+  transition:
+    width 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    height 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    left 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    top 0.4s cubic-bezier(0.34, 1.56, 0.64, 1),
+    box-shadow 0.3s;
+}
+
+.planet:hover {
+  scale: 1;
+  filter: none;
+  width: calc(var(--p) * 1.4);
+  height: calc(var(--p) * 1.4);
+  left: calc(var(--r) - var(--p) * 0.7);
+  top: calc(var(--p) * -0.7);
+  color: transparent;
+  text-shadow: none;
+  box-shadow: 0 0 36px 8px var(--c);
+}
+
+/* Подпись крупнее, так как планета больше не масштабируется */
+.planet::after {
+  font-size: 12px;
+}
+
+/* Вспышка при наведении: кольцо расходится от края */
+.planet:hover::before {
+  inset: -6px;
+}
+
+/* ================= v7: hover на всех планетах ================= */
+
+/* Квадраты орбит-колец перехватывали курсор и закрывали внутренние планеты.
+   Кольца теперь только визуальные, кликаются только сами планеты. */
+.orbit::before,
+.sun {
+  pointer-events: none;
+}
+
+
+/* ================= v8: курсор, магнит, терминал, таймлайн, пасхалка ================= */
+
+/* Кастомный курсор (только на устройствах с мышью) */
+html.custom-cursor,
+html.custom-cursor * {
+  cursor: none !important;
+}
+.cursor-dot {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 8px;
+  height: 8px;
+  margin: -4px 0 0 -4px;
+  border-radius: 50%;
+  background: var(--accent-2);
+  box-shadow: 0 0 12px var(--accent-2);
+  pointer-events: none;
+  z-index: 9999;
+}
+.cursor-ring {
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 36px;
+  height: 36px;
+  margin: -18px 0 0 -18px;
+  border: 2px solid var(--accent);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transition: width 0.3s, height 0.3s, margin 0.3s, background 0.3s, border-color 0.3s;
+}
+.cursor-ring.hover {
+  width: 64px;
+  height: 64px;
+  margin: -32px 0 0 -32px;
+  background: rgba(167, 139, 250, 0.15);
+  border-color: var(--accent-2);
+}
+
+/* Магнитные кнопки */
+.btn {
+  transition: transform 0.25s, box-shadow 0.35s, translate 0.3s ease-out;
+}
+
+/* Терминал */
+.terminal {
+  max-width: 760px;
+  margin: 0 auto;
+  border-radius: 18px;
+  overflow: hidden;
+  background: #0d0a1f;
+  color: #e9e4ff;
+  border: 1px solid var(--border);
+  box-shadow: 0 30px 60px -25px var(--accent);
+  font-family: ui-monospace, Menlo, Consolas, monospace;
+}
+.term-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 14px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.term-bar span {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: #f472b6;
+}
+.term-bar span:nth-child(2) { background: #fbbf24; }
+.term-bar span:nth-child(3) { background: #34d399; }
+.term-bar em {
+  margin-left: auto;
+  font-style: normal;
+  font-size: 12px;
+  color: #a59cc4;
+}
+.term-body {
+  padding: 18px;
+  min-height: 200px;
+  max-height: 340px;
+  overflow: auto;
+  font-size: 14px;
+  line-height: 1.6;
+}
+.term-line { margin-bottom: 10px; }
+.term-out {
+  margin: 0;
+  white-space: pre-wrap;
+  color: #cbd5e1;
+  font: inherit;
+}
+.prompt { color: #34d399; }
+.cmd { color: #a78bfa; }
+.term-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 18px 18px;
+}
+.term-form input {
+  flex: 1;
+  background: transparent;
+  border: none;
+  outline: none;
+  color: #e9e4ff;
+  font: inherit;
+  caret-color: var(--accent-2);
+}
+
+/* Таймлайн, линия заполняется при прокрутке */
+.timeline {
+  position: relative;
+  padding-left: 36px;
+  --fill: 0;
+}
+.timeline::before,
+.timeline::after {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 0;
+  bottom: 0;
+  width: 2px;
+}
+.timeline::before { background: var(--border); }
+.timeline::after {
+  background: linear-gradient(var(--accent), var(--accent-2));
+  transform-origin: top;
+  transform: scaleY(var(--fill));
+}
+.tl-item {
+  position: relative;
+  padding-bottom: 36px;
+}
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -32px;
+  top: 6px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--bg);
+  border: 2px solid var(--accent);
+  box-shadow: 0 0 14px var(--accent);
+}
+.tl-item h4 {
+  margin: 0 0 6px;
+  color: var(--accent);
+  font-size: 1.1rem;
+}
+.tl-item p {
+  margin: 0;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
+/* Пасхалка: вечеринка на 8 секунд (код ↑↑↓↓←→←→BA) */
+.party .orbit,
+.party .planet {
+  animation-duration: 2.5s !important;
+}
+.party .gradient-text {
+  animation-duration: 1.2s !important;
+  filter: hue-rotate(90deg);
+}
+.party .blob {
+  filter: blur(90px) hue-rotate(160deg);
+  animation-duration: 4s, 6s !important;
+}
+
+.toast {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 28px;
+  margin: 0 auto;
+  width: max-content;
+  padding: 14px 24px;
+  border-radius: 999px;
+  background: var(--bg);
+  border: 1px solid var(--accent);
+  color: var(--text);
+  font-weight: 700;
+  z-index: 300;
+  box-shadow: 0 20px 40px -12px var(--accent);
+  animation: pageIn 0.5s ease both;
+}
+
+@media (hover: none), (pointer: coarse) {
+  .cursor-dot, .cursor-ring { display: none; }
+}
+
+
+/* ================= v9: мобильное меню, кнопка наверх, доработки ================= */
+
+.burger {
+  display: none;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid var(--border);
+  background: var(--card);
+  color: var(--text);
+  font-size: 1.2rem;
+  cursor: pointer;
+  place-items: center;
+}
+
+.to-top {
+  position: fixed;
+  right: 24px;
+  bottom: 24px;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid var(--accent);
+  background: var(--card);
+  color: var(--text);
+  font-size: 1.3rem;
+  cursor: pointer;
+  z-index: 150;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.3s, transform 0.3s, box-shadow 0.3s;
+}
+.to-top.show {
+  opacity: 1;
+  transform: none;
+  pointer-events: auto;
+}
+.to-top:hover {
+  box-shadow: 0 0 24px var(--accent);
+}
+
+@media (max-width: 800px) {
+  .navbar {
+    justify-content: space-between;
+  }
+  .burger {
+    display: grid;
+  }
+  .nav-links {
+    display: none;
+    width: 100%;
+    flex-direction: column;
+    gap: 14px;
+    padding: 12px 0;
+  }
+  .nav-links.open {
+    display: flex;
+  }
+  .nav-link {
+    font-size: 1.05rem;
+    padding: 6px 0;
+  }
+}
+
+.term-form input::placeholder {
+  color: #6b6390;
+  opacity: 1;
+}

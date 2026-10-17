@@ -1,13 +1,20 @@
 import { useEffect, useState } from 'react';
+import { Routes, Route, NavLink, Link, Outlet, useLocation } from 'react-router-dom';
 import { translations } from './i18n';
-import { Reveal, TypeOnView, tilt, SolarSystem, useScrollVars } from './components';
+import { Reveal, useScrollVars, useMouseGlow, useInteractions, useKonami, BackToTop } from './components';
+import Home from './pages/Home';
+import About from './pages/About';
+import Skills from './pages/Skills';
+import Projects from './pages/Projects';
+import Reviews from './pages/Reviews';
+import NotFound from './pages/NotFound';
 
 const LINKS = [
-  { key: 'home', href: '#home' },
-  { key: 'about', href: '#about' },
-  { key: 'skills', href: '#skills' },
-  { key: 'projects', href: '#projects' },
-  { key: 'contact', href: '#contact' },
+  { key: 'home', to: '/' },
+  { key: 'about', to: '/about' },
+  { key: 'skills', to: '/skills' },
+  { key: 'projects', to: '/projects' },
+  { key: 'reviews', to: '/reviews' },
 ];
 
 const SOCIALS = [
@@ -20,27 +27,14 @@ const SOCIALS = [
 
 const LANGS = ['uz', 'ru', 'en'];
 
-export default function App() {
-  const [theme, setTheme] = useState(
-    () =>
-      localStorage.getItem('theme') ||
-      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
-  );
-  const [lang, setLang] = useState(() => localStorage.getItem('lang') || 'ru');
-  const [openIdx, setOpenIdx] = useState(0);
-  const t = translations[lang];
-
-  useScrollVars();
+function Layout({ t, lang, setLang, theme, setTheme }) {
+  const { pathname } = useLocation();
+  const [menuOpen, setMenuOpen] = useState(false);
 
   useEffect(() => {
-    document.documentElement.dataset.theme = theme;
-    localStorage.setItem('theme', theme);
-  }, [theme]);
-
-  useEffect(() => {
-    document.documentElement.lang = lang;
-    localStorage.setItem('lang', lang);
-  }, [lang]);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setMenuOpen(false);
+  }, [pathname]);
 
   return (
     <>
@@ -48,28 +42,34 @@ export default function App() {
       <div className="progress" />
       <div className="blob" />
       <div className="blob blob-2" />
+      <div className="mouse-glow" />
 
       <header className="navbar">
-        <a href="#home" className="logo">
+        <Link to="/" className="logo">
           MM<span>.</span>
-        </a>
+        </Link>
 
-        <nav className="nav-links">
+        <nav className={`nav-links ${menuOpen ? 'open' : ''}`}>
           {LINKS.map((l) => (
-            <a key={l.key} href={l.href} className="nav-link">
+            <NavLink
+              key={l.key}
+              to={l.to}
+              onClick={() => setMenuOpen(false)}
+              end={l.to === '/'}
+              className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}
+            >
               {t.nav[l.key]}
-            </a>
+            </NavLink>
           ))}
         </nav>
 
         <div className="nav-tools">
+          <button className="burger" onClick={() => setMenuOpen(!menuOpen)} aria-label="Menu">
+            {menuOpen ? '✕' : '☰'}
+          </button>
           <div className="lang-switch">
             {LANGS.map((l) => (
-              <button
-                key={l}
-                className={l === lang ? 'active' : ''}
-                onClick={() => setLang(l)}
-              >
+              <button key={l} className={l === lang ? 'active' : ''} onClick={() => setLang(l)}>
                 {l.toUpperCase()}
               </button>
             ))}
@@ -85,104 +85,12 @@ export default function App() {
       </header>
 
       <main>
-        <section id="home" className="hero">
-          <Reveal className="hero-text">
-            <p className="greet">{t.hero.greeting}</p>
-            <h1 className="gradient-text">
-              <TypeOnView text={t.hero.name} speed={60} />
-            </h1>
-            <h2 className="role">{t.hero.role}</h2>
-            <p className="subtitle">{t.hero.subtitle}</p>
-            <a href="#contact" className="btn">
-              {t.hero.cta}
-            </a>
-          </Reveal>
-
-          <Reveal className="hero-visual">
-            <div className="tilt" {...tilt}>
-              <div className="avatar-card">
-                <span className="initials">MM</span>
-              </div>
-            </div>
-          </Reveal>
-        </section>
-
-        <Reveal as="section" id="about" className="section">
-          <h2 className="section-title">
-            <TypeOnView text={t.info.title} />
-          </h2>
-          {t.info.items.map((item, i) => {
-            const open = openIdx === i;
-            return (
-              <div key={`${lang}-${i}`} className={`acc-item ${open ? 'open' : ''}`}>
-                <button
-                  className="acc-btn"
-                  aria-expanded={open}
-                  onClick={() => setOpenIdx(open ? -1 : i)}
-                >
-                  <span>{item.title}</span>
-                  <span className="acc-icon">+</span>
-                </button>
-                <div className="acc-body">
-                  {item.tags ? (
-                    <div className="tags">
-                      {item.tags.map((tag) => (
-                        <span key={tag} className="tag">
-                          {tag}
-                        </span>
-                      ))}
-                    </div>
-                  ) : (
-                    <p>{item.text}</p>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </Reveal>
-
-        <Reveal as="section" id="skills" className="section">
-          <h2 className="section-title">
-            <TypeOnView text={t.skills.title} />
-          </h2>
-          <p className="section-hint">{t.skills.hint}</p>
-          <SolarSystem sunLabel="MM" />
-        </Reveal>
-
-        <Reveal as="section" id="projects" className="section">
-          <h2 className="section-title">
-            <TypeOnView text={t.projects.title} />
-          </h2>
-          <div className="project-grid">
-            {t.projects.list.map((p) => (
-              <a
-                key={p.url}
-                href={p.url}
-                target="_blank"
-                rel="noreferrer"
-                className="project"
-              >
-                <h3 className="p-name">{p.name}</h3>
-                <p>{p.desc}</p>
-                <span className="p-stack">{p.stack}</span>
-              </a>
-            ))}
-            <div className="project soon">
-              <h3>{t.projects.card}</h3>
-            </div>
-          </div>
-        </Reveal>
-
-        <Reveal as="section" id="contact" className="section contact">
-          <h2 className="section-title">
-            <TypeOnView text={t.contact.title} />
-          </h2>
-          <p>{t.contact.text}</p>
-          <a href="mailto:mustafomurtazaev7@gmail.com" className="btn">
-            {t.contact.mail}
-          </a>
-        </Reveal>
+        <div key={pathname} className="page">
+          <Outlet context={{ t, lang }} />
+        </div>
       </main>
+
+      <BackToTop />
 
       <Reveal as="footer" className="footer">
         <div className="socials">
@@ -203,6 +111,58 @@ export default function App() {
           © {new Date().getFullYear()} Mustafo Murtazaev · {t.footer.rights}
         </p>
       </Reveal>
+    </>
+  );
+}
+
+export default function App() {
+  const [theme, setTheme] = useState(
+    () =>
+      localStorage.getItem('theme') ||
+      (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')
+  );
+  const [lang, setLang] = useState(() => localStorage.getItem('lang') || 'ru');
+  const t = translations[lang];
+
+  useScrollVars();
+  useMouseGlow();
+  useInteractions();
+
+  const [party, setParty] = useState(false);
+  useKonami(setParty);
+
+  useEffect(() => {
+    document.documentElement.classList.toggle('party', party);
+    if (!party) return;
+    const id = setTimeout(() => setParty(false), 8000);
+    return () => clearTimeout(id);
+  }, [party]);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = theme;
+    localStorage.setItem('theme', theme);
+  }, [theme]);
+
+  useEffect(() => {
+    document.documentElement.lang = lang;
+    localStorage.setItem('lang', lang);
+  }, [lang]);
+
+  return (
+    <>
+    <Routes>
+      <Route
+        element={<Layout t={t} lang={lang} setLang={setLang} theme={theme} setTheme={setTheme} />}
+      >
+        <Route index element={<Home />} />
+        <Route path="about" element={<About />} />
+        <Route path="skills" element={<Skills />} />
+        <Route path="projects" element={<Projects />} />
+        <Route path="reviews" element={<Reviews />} />
+        <Route path="*" element={<NotFound />} />
+      </Route>
+    </Routes>
+    {party && <div className="toast">{t.easter}</div>}
     </>
   );
 }
