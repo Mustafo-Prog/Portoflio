@@ -1,23 +1,44 @@
 export const translations = {
   ru: {
-    nav: { home: 'Главная', about: 'Обо мне', projects: 'Проекты', contact: 'Контакты' },
+    nav: { home: 'Главная', about: 'Обо мне', skills: 'Навыки', projects: 'Проекты', contact: 'Контакты' },
     hero: {
       greeting: 'Привет, я',
       name: 'Mustafo Murtazaev',
-      role: 'Frontend-разработчик',
-      subtitle: 'Создаю интерфейсы, которые одинаково хорошо выглядят и работают.',
+      role: 'Full Stack-разработчик',
+      subtitle: 'Учусь на Full Stack-разработчика и делаю интерфейсы, которые одинаково хорошо выглядят и работают.',
       cta: 'Связаться',
     },
     info: {
       title: 'Обо мне',
       items: [
-        { title: 'Навыки', text: 'Информация скоро появится.' },
-        { title: 'Опыт', text: 'Информация скоро появится.' },
-        { title: 'Образование', text: 'Информация скоро появится.' },
-        { title: 'Интересы', text: 'Информация скоро появится.' },
+        { title: 'Образование', text: 'Najot Talim, курс Full Stack Development' },
+        { title: 'Языки', tags: ['UZ — родной', 'RU — почти родной', 'EN — B2'] },
+        { title: 'Опыт', text: 'Учебные и личные проекты на React и Node.js.' },
+        { title: 'Интересы', tags: ['Футбол', 'Баскетбол', 'Настольный теннис'] },
       ],
     },
-    projects: { title: 'Проекты', card: 'Скоро' },
+    skills: {
+      title: 'Навыки',
+      hint: 'Каждый навык — планета. Листай страницу, и система начнёт вращаться.',
+    },
+    projects: {
+      title: 'Проекты',
+      card: 'Скоро',
+      list: [
+        {
+          name: 'TaskFlow',
+          desc: 'Приложение для управления задачами.',
+          stack: 'React',
+          url: 'https://taskflowtools.netlify.app',
+        },
+        {
+          name: 'Gastro Shef',
+          desc: 'Сайт кулинарного проекта.',
+          stack: 'React',
+          url: 'https://gastro-shef.netlify.app',
+        },
+      ],
+    },
     contact: {
       title: 'Давайте работать вместе',
       text: 'Пишите, отвечу в течение дня.',
@@ -27,24 +48,45 @@ export const translations = {
   },
 
   uz: {
-    nav: { home: 'Asosiy', about: 'Men haqimda', projects: 'Loyihalar', contact: 'Aloqa' },
+    nav: { home: 'Asosiy', about: 'Men haqimda', skills: "Ko'nikmalar", projects: 'Loyihalar', contact: 'Aloqa' },
     hero: {
       greeting: 'Salom, men',
       name: 'Mustafo Murtazaev',
-      role: 'Frontend dasturchi',
-      subtitle: "Chiroyli va tez ishlaydigan interfeyslar yarataman.",
+      role: 'Full Stack dasturchi',
+      subtitle: "Full Stack dasturchi bo'lib o'qiyman va chiroyli hamda tez ishlaydigan interfeyslar yarataman.",
       cta: "Bog'lanish",
     },
     info: {
       title: 'Men haqimda',
       items: [
-        { title: "Ko'nikmalar", text: "Ma'lumot tez orada qo'shiladi." },
-        { title: 'Tajriba', text: "Ma'lumot tez orada qo'shiladi." },
-        { title: "Ta'lim", text: "Ma'lumot tez orada qo'shiladi." },
-        { title: 'Qiziqishlar', text: "Ma'lumot tez orada qo'shiladi." },
+        { title: "Ta'lim", text: "Najot Ta'lim, Full Stack Development kursi" },
+        { title: 'Tillar', tags: ['UZ — ona tili', 'RU — deyarli ona tili', 'EN — B2'] },
+        { title: 'Tajriba', text: "React va Node.js bo'yicha o'quv va shaxsiy loyihalar." },
+        { title: 'Qiziqishlar', tags: ['Futbol', 'Basketbol', 'Stol tennisi'] },
       ],
     },
-    projects: { title: 'Loyihalar', card: 'Tez orada' },
+    skills: {
+      title: "Ko'nikmalar",
+      hint: "Har bir ko'nikma — sayyora. Sahifani aylantiring, tizim aylana boshlaydi.",
+    },
+    projects: {
+      title: 'Loyihalar',
+      card: 'Tez orada',
+      list: [
+        {
+          name: 'TaskFlow',
+          desc: 'Vazifalarni boshqarish ilovasi.',
+          stack: 'React',
+          url: 'https://taskflowtools.netlify.app',
+        },
+        {
+          name: 'Gastro Shef',
+          desc: 'Oshxona loyihasi sayti.',
+          stack: 'React',
+          url: 'https://gastro-shef.netlify.app',
+        },
+      ],
+    },
     contact: {
       title: 'Birgalikda ishlaymizmi?',
       text: 'Yozing, kun davomida javob beraman.',
@@ -54,24 +96,45 @@ export const translations = {
   },
 
   en: {
-    nav: { home: 'Home', about: 'About me', projects: 'Projects', contact: 'Contact' },
+    nav: { home: 'Home', about: 'About me', skills: 'Skills', projects: 'Projects', contact: 'Contact' },
     hero: {
       greeting: "Hi, I'm",
       name: 'Mustafo Murtazaev',
-      role: 'Frontend Developer',
-      subtitle: 'I build interfaces that look and work equally well.',
+      role: 'Full Stack Developer',
+      subtitle: 'I am learning Full Stack development and building interfaces that look and work equally well.',
       cta: 'Get in touch',
     },
     info: {
       title: 'About me',
       items: [
-        { title: 'Skills', text: 'Information coming soon.' },
-        { title: 'Experience', text: 'Information coming soon.' },
-        { title: 'Education', text: 'Information coming soon.' },
-        { title: 'Interests', text: 'Information coming soon.' },
+        { title: 'Education', text: 'Najot Talim, Full Stack Development course' },
+        { title: 'Languages', tags: ['UZ — Native', 'RU — Almost native', 'EN — B2'] },
+        { title: 'Experience', text: 'Learning projects and personal work with React and Node.js.' },
+        { title: 'Interests', tags: ['Football', 'Basketball', 'Ping pong'] },
       ],
     },
-    projects: { title: 'Projects', card: 'Coming soon' },
+    skills: {
+      title: 'Skills',
+      hint: 'Every skill is a planet. Scroll, and the system starts to turn.',
+    },
+    projects: {
+      title: 'Projects',
+      card: 'Coming soon',
+      list: [
+        {
+          name: 'TaskFlow',
+          desc: 'Task management app.',
+          stack: 'React',
+          url: 'https://taskflowtools.netlify.app',
+        },
+        {
+          name: 'Gastro Shef',
+          desc: 'Culinary project website.',
+          stack: 'React',
+          url: 'https://gastro-shef.netlify.app',
+        },
+      ],
+    },
     contact: {
       title: "Let's work together",
       text: 'Write to me, I reply within a day.',

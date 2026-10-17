@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { translations } from './i18n';
-import { Reveal, TypeOnView, tilt } from './components';
+import { Reveal, TypeOnView, tilt, SolarSystem, useScrollVars } from './components';
 
 const LINKS = [
   { key: 'home', href: '#home' },
   { key: 'about', href: '#about' },
+  { key: 'skills', href: '#skills' },
   { key: 'projects', href: '#projects' },
   { key: 'contact', href: '#contact' },
 ];
@@ -13,7 +14,7 @@ const SOCIALS = [
   { name: 'Instagram', href: 'https://www.instagram.com/mustafodev/' },
   { name: 'GitHub', href: 'https://github.com/Mustafo-Prog' },
   { name: 'Telegram', href: 'https://t.me/mustafoprog' },
-  { name: 'LinkedIn', href: 'https://www.linkedin.com/in/mustafo-dev' },
+  { name: 'LinkedIn', href: 'https://www.linkedin.com/in/mustafo-murtazaev-807a60443/' },
   { name: 'Email', href: 'mailto:mustafomurtazaev7@gmail.com' },
 ];
 
@@ -29,6 +30,8 @@ export default function App() {
   const [openIdx, setOpenIdx] = useState(0);
   const t = translations[lang];
 
+  useScrollVars();
+
   useEffect(() => {
     document.documentElement.dataset.theme = theme;
     localStorage.setItem('theme', theme);
@@ -41,6 +44,8 @@ export default function App() {
 
   return (
     <>
+      <div className="stars" />
+      <div className="progress" />
       <div className="blob" />
       <div className="blob blob-2" />
 
@@ -119,11 +124,29 @@ export default function App() {
                   <span className="acc-icon">+</span>
                 </button>
                 <div className="acc-body">
-                  <p>{item.text}</p>
+                  {item.tags ? (
+                    <div className="tags">
+                      {item.tags.map((tag) => (
+                        <span key={tag} className="tag">
+                          {tag}
+                        </span>
+                      ))}
+                    </div>
+                  ) : (
+                    <p>{item.text}</p>
+                  )}
                 </div>
               </div>
             );
           })}
+        </Reveal>
+
+        <Reveal as="section" id="skills" className="section">
+          <h2 className="section-title">
+            <TypeOnView text={t.skills.title} />
+          </h2>
+          <p className="section-hint">{t.skills.hint}</p>
+          <SolarSystem sunLabel="MM" />
         </Reveal>
 
         <Reveal as="section" id="projects" className="section">
@@ -131,11 +154,22 @@ export default function App() {
             <TypeOnView text={t.projects.title} />
           </h2>
           <div className="project-grid">
-            {[0, 1, 2].map((i) => (
-              <div key={i} className="project">
-                <h3>{t.projects.card}</h3>
-              </div>
+            {t.projects.list.map((p) => (
+              <a
+                key={p.url}
+                href={p.url}
+                target="_blank"
+                rel="noreferrer"
+                className="project"
+              >
+                <h3 className="p-name">{p.name}</h3>
+                <p>{p.desc}</p>
+                <span className="p-stack">{p.stack}</span>
+              </a>
             ))}
+            <div className="project soon">
+              <h3>{t.projects.card}</h3>
+            </div>
           </div>
         </Reveal>
 
